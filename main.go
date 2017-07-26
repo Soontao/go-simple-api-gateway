@@ -1,4 +1,4 @@
-package go_simple_api_gateway
+package main
 
 import (
 	"github.com/mkideal/cli"
@@ -7,14 +7,14 @@ import (
 
 type cliArgs struct {
 	cli.Helper
-	ConnectionStr string `cli:"*c,*conn" usage:"mysql connection str" dft:"$API_CONN_STR"`
-	ListenAddress string `cli:"*l,*listen" usage:"listen host and port" dft:"$API_HOST_LS"`
+	ConnectionStr string `cli:"*c,*conn" usage:"mysql connection str" dft:"$GATEWAY_CONN_STR"`
+	ListenAddress string `cli:"*l,*listen" usage:"listen host and port" dft:"$GATEWAY_LS"`
 }
 
 func main() {
 	cli.Run(new(cliArgs), func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*cliArgs)
-		s := server.GateWayServer{}
+		server.NewAuthServer(argv.ConnectionStr).Start(argv.ListenAddress)
 		return nil
 	})
 }

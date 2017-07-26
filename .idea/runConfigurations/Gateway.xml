@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Gateway" type="GoApplicationRunConfiguration" factoryName="Go Application" singleton="true">
+    <module name="go-simple-api-gateway" />
+    <working_directory value="C:\Users\I337313\go\src\github.com\Soontao\go-simple-api-gateway" />
+    <go_parameters value="-i" />
+    <envs>
+      <env name="GATEWAY_LS" value=":1329" />
+      <env name="GATEWAY_CONN_STR" value="casbin:casbin@tcp(mysql.stu.ecs.fornever.org:3306)/" />
+    </envs>
+    <filePath value="C:\Users\I337313\go\src\github.com\Soontao\go-simple-api-gateway" />
+    <kind value="PACKAGE" />
+    <package value="github.com/Soontao/go-simple-api-gateway" />
+    <method />
+  </configuration>
+</component>
