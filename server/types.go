@@ -1,5 +1,7 @@
 package server
 
+var Username = "username"
+
 type Policy struct {
 	User   string `json:"user" form:"user" query:"user"`
 	Path   string `json:"path" form:"path" query:"path"`
@@ -9,6 +11,11 @@ type Policy struct {
 type UserRole struct {
 	User string `json:"user" form:"user" query:"user"`
 	Role string `json:"role" form:"role" query:"role"`
+}
+
+type User struct {
+	Username string `json:"username" form:"username" query:"username"`
+	Password string `json:"password" form:"password" query:"password"`
 }
 
 type SuccessMessage struct {
