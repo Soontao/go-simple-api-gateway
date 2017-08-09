@@ -9,12 +9,14 @@ import (
 	"net/url"
 	"github.com/labstack/gommon/log"
 	casbinMw "github.com/Soontao/echo-contrib/casbin"
+	"github.com/Soontao/go-simple-api-gateway/user"
 )
 
 type AuthServer struct {
 	*echo.Echo
 	*casbin.Enforcer
-	resourceHost *url.URL
+	resourceHost    *url.URL
+	authUserService *user.UserService
 }
 
 func NewAuthServer(connStr string, resourceHostStr string) (s *AuthServer) {
@@ -22,7 +24,7 @@ func NewAuthServer(connStr string, resourceHostStr string) (s *AuthServer) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	s = &AuthServer{echo.New(), enforcer.NewCasbinEnforcer(connStr), resourceHost}
+	s = &AuthServer{echo.New(), enforcer.NewCasbinEnforcer(connStr), resourceHost, user.NewUserService(connStr)}
 	s.Use(NewCoockieSession())
 	s.mountAuthenticateEndpoints()
 	s.mountAuthorizationEndPoints()
@@ -44,7 +46,9 @@ func (s *AuthServer) mountReverseProxy() {
 
 func (s *AuthServer) mountAuthenticateEndpoints() {
 	api := s.Group("/_/auth/api")
-	api.Any("/auth", s.authAPI)
+	api.Any("/auth", s.userAuth)
+	api.Any("/updatepassword", s.userUpdate)
+	api.Any("/register", s.userRegister)
 }
 
 func (s *AuthServer) mountAuthorizationEndPoints() {

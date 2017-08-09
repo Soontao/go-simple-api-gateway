@@ -7,18 +7,41 @@ import (
 	"fmt"
 )
 
-func (s *AuthServer) authAPI(c echo.Context) (err error) {
+func (s *AuthServer) userAuth(c echo.Context) (err error) {
 	sess := session.Default(c)
 	user := User{}
 	c.Bind(&user)
-	// here need to be updated
-	if (user.Username == user.Password) {
+	if (s.authUserService.AuthUser(user.Username, user.Password)) {
 		sess.Set(Username, user.Username)
 		sess.Save()
 		return c.JSON(http.StatusOK, &DataMessage{http.StatusOK, fmt.Sprintf("auth for %s", user.Username)})
 	} else {
 		return c.JSON(http.StatusForbidden, &DataMessage{http.StatusForbidden, "auth failed"})
 	}
+	return
+}
+
+func (s *AuthServer) userRegister(c echo.Context) (err error) {
+	user := &User{}
+	c.Bind(user)
+	if err := s.authUserService.SaveUser(user.Username, user.Password); err != nil {
+		return c.JSON(http.StatusOK, &DataMessage{http.StatusOK, fmt.Sprintf("register for %s", user.Username)})
+	} else {
+		return c.JSON(http.StatusBadRequest, &DataMessage{http.StatusBadRequest, err})
+	}
+
+	return
+}
+
+func (s *AuthServer) userUpdate(c echo.Context) (err error) {
+	user := &User{}
+	c.Bind(user)
+	if (s.authUserService.UpdatePassword(user.Username, user.Password, user.NewPassword)) {
+		return c.JSON(http.StatusOK, &DataMessage{http.StatusOK, fmt.Sprintf("password updated for %s", user.Username)})
+	} else {
+		return c.JSON(http.StatusBadRequest, &DataMessage{http.StatusBadRequest, "password update failed"})
+	}
+
 	return
 }
 

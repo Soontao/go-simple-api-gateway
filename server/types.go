@@ -14,8 +14,9 @@ type UserRole struct {
 }
 
 type User struct {
-	Username string `json:"username" form:"username" query:"username"`
-	Password string `json:"password" form:"password" query:"password"`
+	Username    string `json:"username" form:"username" query:"username"`
+	Password    string `json:"password" form:"password" query:"password"`
+	NewPassword string `json:"new_password" form:"new_password" query:"new_password"`
 }
 
 type SuccessMessage struct {
