@@ -1,6 +1,6 @@
 # GO-SIMPLE-API-GATEWAY
 
-![status](https://ci.fornever.org/job/go-simple-api-gateway/1/badge/icon)
+![status](https://ci.fornever.org/job/go-simple-api-gateway/badge/icon)
 
 A simple API gateway written by golang.
 
