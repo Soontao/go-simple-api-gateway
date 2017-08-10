@@ -1,3 +1,7 @@
+package enforcer
+
+var CasbinConf =
+`
 [request_definition]
 r = sub, obj, act
 
@@ -12,3 +16,4 @@ e = some(where (p.eft == allow))
 
 [matchers]
 m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && (r.act == p.act || p.act == "*")
+`

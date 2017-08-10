@@ -7,6 +7,6 @@ import (
 
 func NewCasbinEnforcer(connStr string) (*casbin.Enforcer) {
 	Adapter := xormadapter.NewAdapter("mysql", connStr, true)
-	enforcer := casbin.NewEnforcer("enforcer/casbin.conf", Adapter)
+	enforcer := casbin.NewEnforcer(casbin.NewModel(CasbinConf), Adapter)
 	return enforcer
 }
