@@ -38,7 +38,7 @@ func (us *UserService) AuthUser(username, password string) (b bool) {
 func (us *UserService) SaveUser(username, password string) (err error) {
 	has, _ := us.engine.Get(&User{Username: username})
 	if has {
-		return errors.Errorf("user %s has", username)
+		return errors.Errorf("user %s has existed", username)
 	}
 	_, err = us.engine.Insert(NewEncryptedUser(username, password))
 	return

@@ -25,13 +25,12 @@ func (s *GatewayServer) userAuth(c echo.Context) (err error) {
 func (s *GatewayServer) userRegister(c echo.Context) (err error) {
 	user := &User{}
 	c.Bind(user)
-	if err := s.authUserService.SaveUser(user.Username, user.Password); err != nil {
-		s.AddRoleForUser(user.Username, "basic_user")
+	if err := s.authUserService.SaveUser(user.Username, user.Password); err == nil {
+		s.AddRoleForUser(user.Username, s.DefaultRegisterRole)
 		return c.JSON(http.StatusOK, &DataMessage{http.StatusOK, fmt.Sprintf("register for %s", user.Username)})
 	} else {
-		return c.JSON(http.StatusBadRequest, &DataMessage{http.StatusBadRequest, err})
+		return c.JSON(http.StatusBadRequest, &DataMessage{http.StatusBadRequest, err.Error()})
 	}
-
 	return
 }
 
