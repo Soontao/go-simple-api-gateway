@@ -15,7 +15,7 @@ type cliArgs struct {
 func main() {
 	cli.Run(new(cliArgs), func(ctx *cli.Context) error {
 		argv := ctx.Argv().(*cliArgs)
-		server.NewAuthServer(argv.ConnectionStr, argv.ReverseHost).Start(argv.AuthServerAddress)
+		server.NewGatewayServer(argv.ConnectionStr, argv.ReverseHost).Start(argv.AuthServerAddress)
 		return nil
 	})
 }

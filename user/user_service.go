@@ -3,6 +3,7 @@ package user
 import (
 	"github.com/go-xorm/xorm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/pkg/errors"
 )
 
 type UserService struct {
@@ -35,7 +36,10 @@ func (us *UserService) AuthUser(username, password string) (b bool) {
 }
 
 func (us *UserService) SaveUser(username, password string) (err error) {
-	// Here need to be checked if record existed
+	has, _ := us.engine.Get(&User{Username: username})
+	if has {
+		return errors.Errorf("user %s has", username)
+	}
 	_, err = us.engine.Insert(NewEncryptedUser(username, password))
 	return
 }

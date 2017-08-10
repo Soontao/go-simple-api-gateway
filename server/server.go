@@ -12,29 +12,47 @@ import (
 	"github.com/Soontao/go-simple-api-gateway/user"
 )
 
-type AuthServer struct {
-	*echo.Echo
-	*casbin.Enforcer
-	resourceHost    *url.URL
-	authUserService *user.UserService
+type GatewayServer struct {
+	*echo.Echo                            // web service
+	*casbin.Enforcer                      // authorization service
+	resourceHost        *url.URL          // be protected http resource
+	authUserService     *user.UserService // user authenticate service
+	DefaultRegisterRole string            // Default New User Role
 }
 
-func NewAuthServer(connStr string, resourceHostStr string) (s *AuthServer) {
+// NewGatewayServer instance
+func NewGatewayServer(connStr string, resourceHostStr string, defaultRole ...string) (s *GatewayServer) {
+
 	resourceHost, err := url.Parse(resourceHostStr)
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	s = &AuthServer{echo.New(), enforcer.NewCasbinEnforcer(connStr), resourceHost, user.NewUserService(connStr)}
+	s = &GatewayServer{
+		Echo:            echo.New(),
+		Enforcer:        enforcer.NewCasbinEnforcer(connStr),
+		resourceHost:    resourceHost,
+		authUserService: user.NewUserService(connStr),
+	}
+
+	if len(defaultRole) == 1 {
+		s.DefaultRegisterRole = defaultRole[0]
+	} else {
+		s.DefaultRegisterRole = "basic_role"
+	}
+
 	s.Use(NewCoockieSession())
 	s.mountAuthenticateEndpoints()
 	s.mountAuthorizationEndPoints()
 	s.mountReverseProxy()
-	s.HideBanner = true
-	s.LoadPolicy()
+	// hide echo banner
+	s.Echo.HideBanner = true
+	// load casbin policy from db
+	s.Enforcer.LoadPolicy()
 	return
 }
 
-func (s *AuthServer) mountReverseProxy() {
+func (s *GatewayServer) mountReverseProxy() {
 	s.Group("/").Use(casbinMw.Middleware(s.Enforcer), middleware.Proxy(&middleware.RoundRobinBalancer{
 		Targets: []*middleware.ProxyTarget{
 			&middleware.ProxyTarget{
@@ -44,14 +62,14 @@ func (s *AuthServer) mountReverseProxy() {
 	}))
 }
 
-func (s *AuthServer) mountAuthenticateEndpoints() {
+func (s *GatewayServer) mountAuthenticateEndpoints() {
 	api := s.Group("/_/auth/api")
 	api.Any("/auth", s.userAuth)
 	api.Any("/updatepassword", s.userUpdate)
 	api.Any("/register", s.userRegister)
 }
 
-func (s *AuthServer) mountAuthorizationEndPoints() {
+func (s *GatewayServer) mountAuthorizationEndPoints() {
 	api := s.Group("/_/gateway/api")
 	policy := api.Group("/policy")
 	policy.GET("/", s.getPolicies).Name = "Get All Policies"

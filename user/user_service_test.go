@@ -5,7 +5,7 @@ import (
 )
 
 func TestUserService_SaveUser(t *testing.T) {
-	us := NewUserService("auth:auth@tcp(mysql.stu.ecs.fornever.org:3306)/auth")
+	us := NewUserService("")
 	us.engine.ShowSQL(true)
 	username := "testUser"
 	password := "testPassword"
