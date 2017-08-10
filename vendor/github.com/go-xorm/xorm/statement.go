@@ -272,9 +272,6 @@ func buildUpdates(engine *Engine, table *core.Table, bean interface{},
 
 		fieldValue := *fieldValuePtr
 		fieldType := reflect.TypeOf(fieldValue.Interface())
-		if fieldType == nil {
-			continue
-		}
 
 		requiredField := useAllCols
 		includeNil := useAllCols

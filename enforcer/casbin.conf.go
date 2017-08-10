@@ -17,3 +17,6 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && (r.act == p.act || p.act == "*")
 `
+
+var CasbinAnonymousRole = "casbin_anonymous"
+var KEY_Username = "username"

@@ -87,10 +87,8 @@ const (
 )
 
 // https://dev.mysql.com/doc/internals/en/com-query-response.html#packet-Protocol::ColumnType
-type fieldType byte
-
 const (
-	fieldTypeDecimal fieldType = iota
+	fieldTypeDecimal byte = iota
 	fieldTypeTiny
 	fieldTypeShort
 	fieldTypeLong
@@ -109,7 +107,7 @@ const (
 	fieldTypeBit
 )
 const (
-	fieldTypeJSON fieldType = iota + 0xf5
+	fieldTypeJSON byte = iota + 0xf5
 	fieldTypeNewDecimal
 	fieldTypeEnum
 	fieldTypeSet

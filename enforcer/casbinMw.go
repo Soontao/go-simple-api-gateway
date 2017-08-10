@@ -1,54 +1,36 @@
-/* Package casbin provides middleware to enable ACL, RBAC, ABAC authorization support.
+//From https://github.com/labstack/echo-contrib/casbin
 
-Simple example:
+//License
 
-	package main
+//The MIT License (MIT)
+//
+//Copyright (c) 2017 LabStack
+//
+//Permission is hereby granted, free of charge, to any person obtaining a copy
+//of this software and associated documentation files (the "Software"), to deal
+//in the Software without restriction, including without limitation the rights
+//to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//copies of the Software, and to permit persons to whom the Software is
+//furnished to do so, subject to the following conditions:
+//
+//The above copyright notice and this permission notice shall be included in all
+//copies or substantial portions of the Software.
+//
+//THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+//SOFTWARE.
 
-	import (
-		"github.com/casbin/casbin"
-		"github.com/labstack/echo"
-		"github.com/labstack/echo-contrib/casbin" casbin-mw
-	)
-
-	func main() {
-		e := echo.New()
-
-		// Mediate the access for every request
-		e.Use(casbin-mw.Middleware(casbin.NewEnforcer("auth_model.conf", "auth_policy.csv")))
-
-		e.Logger.Fatal(e.Start(":1323"))
-	}
-
-Advanced example:
-
-	package main
-
-	import (
-		"github.com/casbin/casbin"
-		"github.com/labstack/echo"
-		"github.com/labstack/echo-contrib/casbin" casbin-mw
-	)
-
-	func main() {
-		ce := casbin.NewEnforcer("auth_model.conf", "")
-		ce.AddRoleForUser("alice", "admin")
-		ce.AddPolicy(...)
-
-		e := echo.New()
-
-		echo.Use(casbin-mw.Middleware(ce))
-
-		e.Logger.Fatal(e.Start(":1323"))
-	}
-*/
-
-package casbin
+package enforcer
 
 import (
 	"github.com/casbin/casbin"
+	"github.com/ipfans/echo-session"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"github.com/ipfans/echo-session"
 )
 
 type (
@@ -103,9 +85,11 @@ func MiddlewareWithConfig(config Config) echo.MiddlewareFunc {
 // Currently, only HTTP basic authentication is supported
 func (a *Config) GetUserName(c echo.Context) (username string) {
 	sess := session.Default(c)
-	tmp := sess.Get("username")
-	if tmp != nil{
+	tmp := sess.Get(KEY_Username)
+	if tmp != nil {
 		username = tmp.(string)
+	} else {
+		username = CasbinAnonymousRole
 	}
 	return
 }

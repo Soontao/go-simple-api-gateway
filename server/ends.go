@@ -6,6 +6,7 @@ import (
 
 	"github.com/ipfans/echo-session"
 	"github.com/labstack/echo"
+	"github.com/Soontao/go-simple-api-gateway/enforcer"
 )
 
 func (s *GatewayServer) userAuth(c echo.Context) (err error) {
@@ -50,6 +51,9 @@ func (s *GatewayServer) enforceAuth(c echo.Context) (err error) {
 	p := new(Policy)
 	if err = c.Bind(p); err != nil {
 		return
+	}
+	if p.User == "" {
+		p.User = enforcer.CasbinAnonymousRole
 	}
 	passed := s.Enforce(p.User, p.Path, p.Method)
 	return c.JSON(http.StatusOK, &SuccessMessage{http.StatusOK, passed})

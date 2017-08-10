@@ -8,7 +8,6 @@ import (
 	"github.com/labstack/echo/middleware"
 	"net/url"
 	"github.com/labstack/gommon/log"
-	casbinMw "github.com/Soontao/echo-contrib/casbin"
 	"github.com/Soontao/go-simple-api-gateway/user"
 )
 
@@ -53,7 +52,7 @@ func NewGatewayServer(connStr string, resourceHostStr string, defaultRole ...str
 }
 
 func (s *GatewayServer) mountReverseProxy() {
-	s.Group("/").Use(casbinMw.Middleware(s.Enforcer), middleware.Proxy(&middleware.RoundRobinBalancer{
+	s.Group("/").Use(enforcer.Middleware(s.Enforcer), middleware.Proxy(&middleware.RoundRobinBalancer{
 		Targets: []*middleware.ProxyTarget{
 			&middleware.ProxyTarget{
 				URL: s.resourceHost,
