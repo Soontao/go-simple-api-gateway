@@ -1,4 +1,4 @@
-//From https://github.com/labstack/echo-contrib/casbin
+//Based on https://github.com/labstack/echo-contrib/casbin
 
 //License
 
@@ -27,6 +27,7 @@
 package enforcer
 
 import (
+	"github.com/Soontao/go-simple-api-gateway/key"
 	"github.com/casbin/casbin"
 	"github.com/ipfans/echo-session"
 	"github.com/labstack/echo"
@@ -74,9 +75,9 @@ func MiddlewareWithConfig(config Config) echo.MiddlewareFunc {
 		return func(c echo.Context) error {
 			if config.Skipper(c) || config.CheckPermission(c) {
 				return next(c)
+			} else {
+				return echo.ErrForbidden
 			}
-
-			return echo.ErrForbidden
 		}
 	}
 }
@@ -85,11 +86,11 @@ func MiddlewareWithConfig(config Config) echo.MiddlewareFunc {
 // Currently, only HTTP basic authentication is supported
 func (a *Config) GetUserName(c echo.Context) (username string) {
 	sess := session.Default(c)
-	tmp := sess.Get(KEY_Username)
+	tmp := sess.Get(key.KEY_Username)
 	if tmp != nil {
 		username = tmp.(string)
 	} else {
-		username = CasbinAnonymousRole
+		username = key.KEY_CasbinAnonymous
 	}
 	return
 }

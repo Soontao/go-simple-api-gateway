@@ -1,14 +1,14 @@
 package server
 
 import (
-	"github.com/labstack/echo"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/Soontao/go-simple-api-gateway/enforcer"
+	"github.com/Soontao/go-simple-api-gateway/key"
+	"github.com/Soontao/go-simple-api-gateway/user"
 	"github.com/casbin/casbin"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"net/url"
-	"github.com/labstack/gommon/log"
-	"github.com/Soontao/go-simple-api-gateway/user"
 )
 
 type GatewayServer struct {
@@ -21,12 +21,11 @@ type GatewayServer struct {
 
 // NewGatewayServer instance
 func NewGatewayServer(connStr string, resourceHostStr string, defaultRole ...string) (s *GatewayServer) {
-
 	resourceHost, err := url.Parse(resourceHostStr)
-
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+	// construct gateway
 	s = &GatewayServer{
 		Echo:            echo.New(),
 		Enforcer:        enforcer.NewCasbinEnforcer(connStr),
@@ -37,7 +36,7 @@ func NewGatewayServer(connStr string, resourceHostStr string, defaultRole ...str
 	if len(defaultRole) == 1 {
 		s.DefaultRegisterRole = defaultRole[0]
 	} else {
-		s.DefaultRegisterRole = "basic_role"
+		s.DefaultRegisterRole = key.KEY_BasicRole
 	}
 
 	s.Use(NewCoockieSession())
@@ -52,7 +51,7 @@ func NewGatewayServer(connStr string, resourceHostStr string, defaultRole ...str
 }
 
 func (s *GatewayServer) mountReverseProxy() {
-	s.Group("/").Use(enforcer.Middleware(s.Enforcer), middleware.Proxy(&middleware.RoundRobinBalancer{
+	s.Group("/").Use(s.BasicAuthSessionMw, enforcer.Middleware(s.Enforcer), middleware.Proxy(&middleware.RoundRobinBalancer{
 		Targets: []*middleware.ProxyTarget{
 			&middleware.ProxyTarget{
 				URL: s.resourceHost,

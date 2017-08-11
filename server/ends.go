@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/Soontao/go-simple-api-gateway/key"
 	"github.com/ipfans/echo-session"
 	"github.com/labstack/echo"
-	"github.com/Soontao/go-simple-api-gateway/enforcer"
 )
 
 func (s *GatewayServer) userAuth(c echo.Context) (err error) {
@@ -14,7 +14,7 @@ func (s *GatewayServer) userAuth(c echo.Context) (err error) {
 	user := User{}
 	c.Bind(&user)
 	if s.authUserService.AuthUser(user.Username, user.Password) {
-		sess.Set(Username, user.Username)
+		sess.Set(key.KEY_Username, user.Username)
 		sess.Save()
 		return c.JSON(http.StatusOK, &DataMessage{http.StatusOK, fmt.Sprintf("auth for %s", user.Username)})
 	} else {
@@ -53,7 +53,7 @@ func (s *GatewayServer) enforceAuth(c echo.Context) (err error) {
 		return
 	}
 	if p.User == "" {
-		p.User = enforcer.CasbinAnonymousRole
+		p.User = key.KEY_CasbinAnonymous
 	}
 	passed := s.Enforce(p.User, p.Path, p.Method)
 	return c.JSON(http.StatusOK, &SuccessMessage{http.StatusOK, passed})

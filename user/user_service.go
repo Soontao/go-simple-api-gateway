@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/go-xorm/xorm"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-xorm/xorm"
 	"github.com/pkg/errors"
 )
 
