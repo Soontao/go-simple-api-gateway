@@ -1,6 +1,9 @@
 package server
 
 import (
+	"net/http"
+	"net/url"
+
 	"github.com/Soontao/go-simple-api-gateway/enforcer"
 	"github.com/Soontao/go-simple-api-gateway/key"
 	"github.com/Soontao/go-simple-api-gateway/user"
@@ -8,7 +11,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	"net/url"
 )
 
 type GatewayServer struct {
@@ -62,9 +64,9 @@ func (s *GatewayServer) mountReverseProxy() {
 
 func (s *GatewayServer) mountAuthenticateEndpoints() {
 	api := s.Group("/_/auth/api")
-	api.Any("/auth", s.userAuth)
-	api.Any("/updatepassword", s.userUpdate)
-	api.Any("/register", s.userRegister)
+	api.POST("/auth", s.userAuth).Name = "User Auth"
+	api.POST("/updatepassword", s.userUpdate).Name = "Passwrod Update"
+	api.POST("/register", s.userRegister).Name = "Register New User"
 }
 
 func (s *GatewayServer) mountAuthorizationEndPoints() {

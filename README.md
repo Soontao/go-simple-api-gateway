@@ -49,3 +49,118 @@ docker run -d --restart=always -p 11329:1329 -e GATEWAY_CONN_STR='user:pass@tcp(
 ## DOWNLOAD
 
 You could download the latest build binaries from [here](https://download.fornever.org/go-simple-api-gateway/latest/)
+
+## APIs
+
+### payload model
+
+use `/_/auth/*` apis to authenticate, and use `/_/gateway/*` apis to authorization
+
+authenticate model:
+
+```json
+
+{
+  "username":"",
+  "password":"",
+  "new_password":""
+}
+
+```
+
+---
+
+policy model:
+
+```json
+{
+  "user":"",
+  "path":"",
+  "method":""
+}
+
+```
+
+`user` is a user or a role name. `method` can be `*`
+
+---
+
+userrole model:
+
+```json
+
+{
+  "user":"",
+  "role":""
+}
+
+```
+
+### api list
+
+```json
+
+[
+  {
+    "method": "POST",
+    "path": "/_/auth/api/updatepassword",
+    "name": "Passwrod Update"
+  },
+  {
+    "method": "POST",
+    "path": "/_/auth/api/auth",
+    "name": "User Auth"
+  },
+  {
+    "method": "POST",
+    "path": "/_/auth/api/register",
+    "name": "Register New User"
+  },
+  {
+    "method": "DELETE",
+    "path": "/_/gateway/api/role/",
+    "name": "Remove Role From User"
+  },
+  {
+    "method": "GET",
+    "path": "/_/gateway/api/role/users",
+    "name": "Get Users of a Role"
+  },
+  {
+    "method": "GET",
+    "path": "/_/gateway/api/user/role",
+    "name": "Get Roles of a User"
+  },
+  {
+    "method": "GET",
+    "path": "/_/gateway/api/policy/",
+    "name": "Get All Policies"
+  },
+  {
+    "method": "PUT",
+    "path": "/_/gateway/api/role/",
+    "name": "Add Role To User"
+  },
+  {
+    "method": "POST",
+    "path": "/_/gateway/api/policy/enforce",
+    "name": "Find Some Authority"
+  },
+  {
+    "method": "GET",
+    "path": "/_/gateway/api/policy/group",
+    "name": "Get Group Policies"
+  },
+  {
+    "method": "DELETE",
+    "path": "/_/gateway/api/policy/",
+    "name": "Remove Authority"
+  },
+  {
+    "method": "PUT",
+    "path": "/_/gateway/api/policy/",
+    "name": "Add Policy"
+  }
+]
+
+```
