@@ -261,23 +261,23 @@ func (a *Adapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int,
 	line := CasbinRule{}
 
 	line.PType = ptype
-	if fieldIndex <= 0 && 0 < fieldIndex + len(fieldValues) {
-		line.V0 = fieldValues[0 - fieldIndex]
+	if fieldIndex <= 0 && 0 < fieldIndex+len(fieldValues) {
+		line.V0 = fieldValues[0-fieldIndex]
 	}
-	if fieldIndex <= 1 && 1 < fieldIndex + len(fieldValues) {
-		line.V1 = fieldValues[1 - fieldIndex]
+	if fieldIndex <= 1 && 1 < fieldIndex+len(fieldValues) {
+		line.V1 = fieldValues[1-fieldIndex]
 	}
-	if fieldIndex <= 2 && 2 < fieldIndex + len(fieldValues) {
-		line.V2 = fieldValues[2 - fieldIndex]
+	if fieldIndex <= 2 && 2 < fieldIndex+len(fieldValues) {
+		line.V2 = fieldValues[2-fieldIndex]
 	}
-	if fieldIndex <= 3 && 3 < fieldIndex + len(fieldValues) {
-		line.V3 = fieldValues[3 - fieldIndex]
+	if fieldIndex <= 3 && 3 < fieldIndex+len(fieldValues) {
+		line.V3 = fieldValues[3-fieldIndex]
 	}
-	if fieldIndex <= 4 && 4 < fieldIndex + len(fieldValues) {
-		line.V4 = fieldValues[4 - fieldIndex]
+	if fieldIndex <= 4 && 4 < fieldIndex+len(fieldValues) {
+		line.V4 = fieldValues[4-fieldIndex]
 	}
-	if fieldIndex <= 5 && 5 < fieldIndex + len(fieldValues) {
-		line.V5 = fieldValues[5 - fieldIndex]
+	if fieldIndex <= 5 && 5 < fieldIndex+len(fieldValues) {
+		line.V5 = fieldValues[5-fieldIndex]
 	}
 
 	_, err := a.engine.Delete(line)

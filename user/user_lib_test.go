@@ -3,8 +3,8 @@ package user
 import (
 	"encoding/json"
 	"fmt"
-	"testing"
 	"github.com/Soontao/go-simple-api-gateway/types"
+	"testing"
 )
 
 func TestNewUser(t *testing.T) {

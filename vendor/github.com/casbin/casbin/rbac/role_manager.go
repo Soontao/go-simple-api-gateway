@@ -111,7 +111,7 @@ func (rm *RoleManager) GetRoles(name string, domain ...string) []string {
 	roles := rm.createRole(name).getRoles()
 	if len(domain) == 1 {
 		for i := range roles {
-			roles[i] = roles[i][len(domain[0]) + 2:]
+			roles[i] = roles[i][len(domain[0])+2:]
 		}
 	}
 	return roles

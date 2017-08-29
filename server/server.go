@@ -1,7 +1,6 @@
 package server
 
 import (
-	"net/http"
 	"net/url"
 
 	"github.com/Soontao/go-simple-api-gateway/enforcer"

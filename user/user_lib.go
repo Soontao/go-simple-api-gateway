@@ -1,10 +1,10 @@
 package user
 
 import (
-	"golang.org/x/crypto/bcrypt"
-	"time"
-	"strings"
 	"github.com/satori/go.uuid"
+	"golang.org/x/crypto/bcrypt"
+	"strings"
+	"time"
 )
 
 func CryptPass(pass string) string {
@@ -18,9 +18,9 @@ func ComparePassword(hash, password string) error {
 
 // User db model
 type User struct {
-	UUID      string `json:"uuid" xorm:"'uuid' pk"`
-	Username  string `json:"username" xorm:"unique"`
-	Password  string `json:"-"`
+	UUID      string    `json:"uuid" xorm:"'uuid' pk"`
+	Username  string    `json:"username" xorm:"unique"`
+	Password  string    `json:"-"`
 	CreatedAt time.Time `xorm:"created" json:"created_at"`
 	UpdatedAt time.Time `xorm:"updated" json:"updated_at"`
 }

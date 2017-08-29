@@ -18,16 +18,16 @@ type User struct {
 }
 
 type SuccessMessage struct {
-	Status  int `json:"status" form:"status" query:"status"`
+	Status  int  `json:"status" form:"status" query:"status"`
 	Success bool `json:"success" form:"success" query:"success"`
 }
 
 type DataMessage struct {
-	Status int `json:"status" form:"status" query:"status"`
-	Data   interface{}`json:"data" form:"data" query:"data"`
+	Status int         `json:"status" form:"status" query:"status"`
+	Data   interface{} `json:"data" form:"data" query:"data"`
 }
 
 type Message struct {
-	Status  int `json:"status" form:"status" query:"status"`
-	Message interface{}`json:"message" form:"message" query:"message"`
+	Status  int         `json:"status" form:"status" query:"status"`
+	Message interface{} `json:"message" form:"message" query:"message"`
 }
